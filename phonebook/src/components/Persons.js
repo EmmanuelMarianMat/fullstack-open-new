@@ -1,5 +1,4 @@
 const Persons = props => {
-
     return(
       <>
         {props.persons.map((person, i) =>{
