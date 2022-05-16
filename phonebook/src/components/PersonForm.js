@@ -1,3 +1,4 @@
+import personService from '../services/persons'
 const PersonForm = props => {
     const persons = props.persons;
     const setPersons = props.setPersons;
@@ -25,10 +26,25 @@ const PersonForm = props => {
         }
     
         if(index!==-1) {
-          alert(`${newName} already exists in phonebook`)
+          if(window.confirm(`${newName} already exixts in the phonebook. Replace old number with the new one?`)){
+            personService
+              .update(persons[index].id, {name: newName, number: newNumber})
+              .then(response => {
+                let dup = [...persons]
+                dup[index].number = newNumber;
+                setPersons(dup)
+              })
+          }
         }
         else{
-          setPersons(persons.concat({name: newName, number: newNumber, id: persons.length+1}))
+          const newPerson = {name: newName, number: newNumber}
+          personService
+            .create(newPerson)
+            .then(response => {
+              console.log(response)
+              setPersons(persons.concat(newPerson))
+            })
+          
           setNewName('')
           setNewNumber('')
           event.target.reset()
