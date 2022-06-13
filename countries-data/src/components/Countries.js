@@ -1,5 +1,4 @@
 import CountryDetails from "./CountryDetails"
-import { useState } from "react"
 
 const Button = (props) => (
     <button onClick={props.handleClick}>
@@ -8,32 +7,28 @@ const Button = (props) => (
 )
 
 const Countries = props => {
-    let filtered = []
-    const [select, setSelect] = useState(false)
-    for (const i in props.countries) {
-        const country = props.countries[i]
-        if(country.name.toLowerCase().includes(props.term.toLowerCase()))
-            filtered.push(country)
-    }
-    if(filtered.length > 10){
+    if(props.filtered.length > 10){
         return(
             <>Too many matches. Specify another filter</>
         )
     }
-    else if(filtered.length !== 1){
+    else if(props.filtered.length === 0){
+        return(
+            <>No matches. Specify another filter</>
+        )
+    }
+    else if(props.filtered.length>1){
         return(
             <>
-                {filtered.map((country, i) => <p key={country.key}>{country.name}<Button text="show" handleClick={()=>{setSelect(country)}}/></p>)}
-
-                {select?<><CountryDetails country={select}/></>:null}
+                {props.filtered.map((country, i) => <p key={country.key}>{country.name}<Button text="show" handleClick={()=>{props.setSearch(country.name)}}/></p>)}
             </>
         )
     }
-    else{
-        return(
-            <CountryDetails country={filtered[0]} />
-        )
-    }
+    console.log(props.filtered[0])
+    return(
+        <CountryDetails country={props.filtered[0]} />
+    )
+        
 }
 
 export default Countries;

@@ -5,7 +5,7 @@ import Countries from './components/Countries'
 
 const App = () => {
   const [search, setSearch] = useState('')
-  const [countries, setCountries] = useState({})
+  const [countries, setCountries] = useState([])
   useEffect(() => {
     console.log('effect')
     axios
@@ -29,11 +29,11 @@ const App = () => {
         setCountries(data_dup)
       })
   }, [])
-  // console.log(countries)
+  const filtered = countries.filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
   return(
     <>
-      <Filter setSearch={setSearch}/>
-      <Countries term={search} countries={countries}/>
+      <Filter search={search} setSearch={setSearch}/>
+      <Countries setSearch={setSearch} filtered={filtered}/>
     </>
   )
 }
