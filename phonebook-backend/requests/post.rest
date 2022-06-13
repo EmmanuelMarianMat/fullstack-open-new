@@ -1,0 +1,13 @@
+@hostname = localhost
+@port = 3001
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+# POST /users
+POST http://{{host}}/api/persons HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "name": "Emmanuel",
+    "number": "1234567890"
+}
