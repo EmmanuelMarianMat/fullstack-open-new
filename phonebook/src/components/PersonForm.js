@@ -6,6 +6,8 @@ const PersonForm = props => {
     const setNewName = props.setNewName;
     const newNumber = props.newNumber;
     const setNewNumber = props.setNewNumber;
+    const setMessage = props.setMessage;
+    const setError = props.setError;
   
     const handleSubmit  = (event) => {
       event.preventDefault();
@@ -29,12 +31,23 @@ const PersonForm = props => {
           if(window.confirm(`${newName} already exixts in the phonebook. Replace old number with the new one?`)){
             personService
               .update(persons[index].id, {name: newName, number: newNumber})
+              // .catch(error => {
+              //   setError(error)
+              // })
               .then(response => {
                 let dup = [...persons]
                 dup[index].number = newNumber;
                 setPersons(dup)
+                setMessage(`Updated ${newName}`)
+                setError(false)
+                setTimeout(() => {
+                  setMessage(null)
+                }, 5000)
               })
           }
+          setNewName('')
+          setNewNumber('')
+          event.target.reset()
         }
         else{
           const newPerson = {name: newName, number: newNumber}
@@ -42,7 +55,13 @@ const PersonForm = props => {
             .create(newPerson)
             .then(response => {
               console.log(response)
+              newPerson.id = response.data.id
               setPersons(persons.concat(newPerson))
+              setMessage(`Added ${newName}`)
+              setError(false)
+              setTimeout(() => {
+                setMessage(null)
+              }, 5000)
             })
           
           setNewName('')
